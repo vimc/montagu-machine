@@ -44,7 +44,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision :shell do |shell|
     shell.path = 'provision/setup-docker'
-    shell.args = ['/mnt/data', 'vagrant']
+    shell.args = ['vagrant']
     shell.env = {"DOCKER_LARGE_DISK" => "/mnt/data"}
   end
   config.vm.provision :shell do |shell|
