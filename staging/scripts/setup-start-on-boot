@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -ex
+
+read -p "What user should vagrant run as? " vagrant_user
+
+root_staging=$(dirname $(dirname $(realpath $0)))
+target=/etc/systemd/system/montagu-staging.service
+
+cp $root_staging/systemctl/montagu-staging.service $target
+sed -i "s:__PATH__:$root_staging:g" $target
+sed -i "s:__USER__:$vagrant_user:g" $target
+
+systemctl enable montagu-staging
+
+set +x
+echo ""
+echo "Montagu staging VMs are installed as a service as user $vagrant_user"
+echo "and will automatically resume after a system boot. To start the VMs now,"
+echo "run:"
+echo ""
+echo "systemctl start montagu-staging"
+echo ""
