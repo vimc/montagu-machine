@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -e
+HERE=$(dirname $(realpath $0))
+MONTAGU_MACHINE_ROOT=$(realpath $HERE/../..)
+
+for machine in science uat; do
+    cat <<EOF > ~/ssh-$machine
+#!/usr/bin/env bash
+set -e
+cd $MONTAGU_MACHINE_ROOT && vagrant ssh $machine
+EOF
+    chmod +x ~/ssh-$machine
+done
