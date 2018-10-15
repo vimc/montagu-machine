@@ -53,6 +53,9 @@ Vagrant.configure(2) do |config|
   config.vm.provision :shell do |shell|
     shell.path = 'provision/setup-vault'
   end
+  config.vm.provision :shell do |shell|
+    shell.path = 'provision/setup-machine-metrics'
+  end
 
   permanent.each do |machine|
     config.vm.define machine[:hostname], autostart: machine[:autostart] do |machine_config|
