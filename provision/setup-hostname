@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -ex
 NAME=$1
 if [ ! "$#" -eq 1 ]; then
     echo "Expected one argument"

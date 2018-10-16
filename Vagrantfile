@@ -7,17 +7,26 @@ box = "bento/ubuntu-16.04"
 ram_size_mb = '16384'
 data_disk_size_gb = 900
 
+vault_config_file = 'staging/shared/vault_config'
+
+if !File.file?(vault_config_file)
+  raise "Run ./staging/scripts/vault-prepare first!"
+end
+
+vault_config = Hash[File.read(vault_config_file).split("\n").
+                     map{|s| s.split('=')}]
+
 permanent = [
-  { 
+  {
     :hostname => 'uat',
     :ip => '192.168.81.11',
     :port => 10443,
     :dbport => 15432,
     :autostart => true
   },
-  { 
-    :hostname => 'science', 
-    :ip => '192.168.81.12', 
+  {
+    :hostname => 'science',
+    :ip => '192.168.81.12',
     :port => 11443,
     :dbport => 5432,
     :autostart => true
@@ -33,7 +42,7 @@ permanent = [
 
 Vagrant.configure(2) do |config|
   config.vm.box = box
-  config.vm.synced_folder 'shared', '/vagrant'
+  config.vm.synced_folder 'staging/shared', '/vagrant'
 
   # Configure a second disk
   config.persistent_storage.enabled = true
@@ -43,13 +52,24 @@ Vagrant.configure(2) do |config|
   config.persistent_storage.size = data_disk_size_gb * 1024
 
   config.vm.provision :shell do |shell|
-    shell.path = 'provision/setup-docker.sh'
+    shell.path = 'provision/setup-docker'
+    shell.args = ['vagrant']
+    shell.env = {"DOCKER_LARGE_DISK" => "/mnt/data"}
   end
   config.vm.provision :shell do |shell|
-    shell.path = 'provision/setup-pip.sh'
+    shell.path = 'provision/setup-pip'
   end
   config.vm.provision :shell do |shell|
-    shell.path = 'provision/setup-vault.sh'
+    shell.path = 'provision/setup-vault'
+  end
+  config.vm.provision :shell do |shell|
+    shell.path = 'provision/setup-machine-metrics'
+  end
+
+  config.vm.provision :shell do |shell|
+    shell.path = 'provision/setup-montagu'
+    shell.env = vault_config
+    shell.privileged = false
   end
 
   permanent.each do |machine|
@@ -59,14 +79,14 @@ Vagrant.configure(2) do |config|
         vbox.memory = ram_size_mb
       end
       machine_config.persistent_storage.location =
-        "disk/#{machine[:hostname]}.vdi"
+        "staging/disk/#{machine[:hostname]}.vdi"
       machine_config.vm.network :private_network, ip: machine[:ip]
       machine_config.vm.network "forwarded_port", guest: machine[:port],
                                 host: machine[:port]
       machine_config.vm.network "forwarded_port", guest: 5432,
                                 host: machine[:dbport]
       machine_config.vm.provision :shell do |shell|
-        shell.path = 'provision/setup-hostname.sh'
+        shell.path = 'provision/setup-hostname'
         shell.args = machine[:hostname]
       end
     end

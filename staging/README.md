@@ -1,88 +1,43 @@
-# Montagu staging
-First, SSH to the support machine
+# staging machines
+
+This holds scripts and data for interacting with the staging machines, in addition to the basic provisioning and vagrant bits that are at the root of the repository.
+
+* `scripts/write-ssh-shortcuts`: writes out files `ssh-science` and `ssh-uat` in the home directory for easy access to the staging machines from the host
+
+## Setting up on a new machine
+
+Run all commands from the root of this repository, not from within the `staging` directory.
+
+First, install all dependencies
+
 ```
-ssh support.montagu.dide.ic.ac.uk
+sudo ./provision/setup-vagrant
 ```
 
 ## To set up the staging VMs to run as a systemd service
+
 ```
-sudo ./scripts/start-on-boot.sh
+sudo ./provision/staging/setup-start-on-boot
 ```
+
+The username you should provide is probably `vagrant`
+
 The VMs will then start automatically on boot, and shutdown gracefully when the
 host system shuts down.
 
 ### Managing the service
+
 * To start `sudo systemctl start montagu-staging.service`
 * To stop `sudo systemctl stop montagu-staging.service`
-* To uninstall the service (and disable auto start on boot): 
-  `sudo ./scripts/remove-start-on-boot.sh`
+* To uninstall the service (and disable auto start on boot):
+  `sudo ./scripts/staging/remove-start-on-boot`
 
 ### Service logging
+
 ```
 systemctl status montagu-staging         # short status, run as ordinary user
 sudo journalctl --unit montagu-staging   # full log, needs root
 ```
-
-## Managing the staging VMs without installing them as a service
-### To start the VMs
-```
-sudo su vagrant
-cd ~/staging/staging
-vagrant up
-```
-
-This will bring up two VMs; one called `uat` and one called `science`.
-
-### To stop the VMs
-```
-sudo su vagrant
-cd ~/staging/staging
-vagrant halt
-```
-
-## To deploy on to a VM
-To deploy onto the stage VM of your choice:
-
-```
-vagrant ssh uat            # or vagrant ssh science
-cd montagu
-./deploy.py                # or sudo deploy.py on science
-```
-
-You will be asked a series of interactive configuration questions. It's 
-important that the port you configure Montagu with matches the eventual port
-that users will be navigating to. So the port that Vagrant exposes the outside
-world must match.
-
-## Access the stage instances
-From within the VM you can browse to:
-
-UAT: https://support.montagu.dide.ic.ac.uk:10443
-
-Science: https://support.montagu.dide.ic.ac.uk:11443
-
-## To rebuild a VM
-
-```
-vagrant ssh uat -c '/vagrant/record-montagu-configuration'
-vagrant destroy uat
-vboxmanage closemedium disk disk/uat.vdi --delete
-./scripts/restore-prepare.sh
-vagrant up uat
-vagrant ssh uat -c '/vagrant/restore'
-```
-
-## To test the restore
-
-```
-vagrant destroy -f restore-test
-vboxmanage closemedium disk disk/restore-test.vdi --delete
-./scripts/restore-prepare.sh
-vagrant up restore-test
-vagrant ssh restore-test -c '/vagrant/restore'
-```
-
-Then go to https://support.montagu.dide.ic.ac.uk:20443 where things should be running
 
 ## Troubleshooting
 
@@ -117,11 +72,3 @@ The solution is to load the virtualbox module
 ```
 sudo modprobe vboxnetadp
 ```
-
-## Requirements
-
-Install in the host machine:
-
-* [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
-* [Vagrant](https://www.vagrantup.com/downloads.html)
-* `vagrant plugin install vagrant-persistent-storage`
