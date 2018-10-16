@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+set -e
+
+if [ `id -u` -eq 0 ]; then
+    echo "This script is designed to be run by an ordinary user"
+    exit 1
+fi
+
+MONTAGU_PATH=~/montagu
+MONTAGU_ORDERLY_PATH=~/montagu-orderly
+MONTAGU_DATA_PATH=~/montagu-data
+CONFIG_NAME=$(hostname)
+
+vault login -method=github
+
+if [ ! -f /root/.docker/config.json ]; then
+    vault read -field=password /secret/registry/vimc | \
+        sudo -H docker login -u vimc --password-stdin docker.montagu.dide.ic.ac.uk:5000
+fi
+
+if [ ! -f ~/.docker/config.json ]; then
+    vault read -field=password /secret/registry/vimc | \
+        docker login -u vimc --password-stdin docker.montagu.dide.ic.ac.uk:5000
+fi
+
+if [ ! -f ~/.ssh/id_rsa ]; then
+    echo "Configuring ssh"
+    mkdir -p ~/.ssh/
+    vault read -field=value secret/vimc-robot/id_rsa.pub > ~/.ssh/id_rsa.pub
+    vault read -field=value secret/vimc-robot/id_rsa > ~/.ssh/id_rsa
+    chmod 600 ~/.ssh/id_rsa
+    ssh-keyscan github.com > ~/.ssh/known_hosts
+fi
+
+if [ -d ${MONTAGU_ORDERLY_PATH} ]; then
+    echo "orderly already set up"
+else
+    echo "setting up orderly"
+    git clone https://github.com/vimc/montagu-orderly.git $MONTAGU_ORDERLY_PATH
+fi
+
+if [ -d ${MONTAGU_DATA_PATH} ]; then
+    echo "montagu-data already set up"
+else
+    echo "setting up montagu-data"
+    git clone git@github.com:vimc/montagu-data.git $MONTAGU_DATA_PATH
+fi
+
+if [ -d montagu ]; then
+    echo "montagu already set up"
+else
+    echo "setting up montagu"
+    git clone --recursive https://github.com/vimc/montagu
+    git -C ${MONTAGU_PATH} checkout i1472
+    pip3 install --user -r ${MONTAGU_PATH}/src/requirements.txt
+    cp ${MONTAGU_PATH}/settings/${CONFIG_NAME}.json \
+       ${MONTAGU_PATH}/src/montagu-deploy.json
+fi

@@ -7,6 +7,15 @@ box = "bento/ubuntu-16.04"
 ram_size_mb = '16384'
 data_disk_size_gb = 900
 
+vault_config_file = 'staging/shared/vault_config'
+
+if !File.file?(vault_config_file)
+  raise "Run ./staging/scripts/vault-prepare first!"
+end
+
+vault_config = Hash[File.read(vault_config_file).split("\n").
+                     map{|s| s.split('=')}]
+
 permanent = [
   {
     :hostname => 'uat',
@@ -55,6 +64,12 @@ Vagrant.configure(2) do |config|
   end
   config.vm.provision :shell do |shell|
     shell.path = 'provision/setup-machine-metrics'
+  end
+
+  config.vm.provision :shell do |shell|
+    shell.path = 'provision/setup-montagu'
+    shell.env = vault_config
+    shell.privileged = false
   end
 
   permanent.each do |machine|
