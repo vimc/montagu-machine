@@ -66,12 +66,6 @@ Vagrant.configure(2) do |config|
     shell.path = 'provision/setup-machine-metrics'
   end
 
-  config.vm.provision :shell do |shell|
-    shell.path = 'provision/setup-montagu'
-    shell.env = vault_config
-    shell.privileged = false
-  end
-
   permanent.each do |machine|
     config.vm.define machine[:hostname], autostart: machine[:autostart] do |machine_config|
       machine_config.vm.provider :virtualbox do | vbox |
@@ -88,6 +82,14 @@ Vagrant.configure(2) do |config|
       machine_config.vm.provision :shell do |shell|
         shell.path = 'provision/setup-hostname'
         shell.args = machine[:hostname]
+      end
+
+      # This one depends on the hostname being set so it needs to move
+      # here
+      machine_config.vm.provision :shell do |shell|
+        shell.path = 'provision/setup-montagu'
+        shell.env = vault_config
+        shell.privileged = false
       end
     end
   end
