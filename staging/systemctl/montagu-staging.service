@@ -9,7 +9,7 @@ WantedBy=multi-user.target
 [Service]
 WorkingDirectory=__PATH__
 User=__USER__
-ExecStart=__PATH__/scripts/start.sh
-ExecStop=__PATH__/scripts/stop.sh
+ExecStart=__PATH__/systemctl/start
+ExecStop=__PATH__/systemctl/stop
 Type=oneshot
 RemainAfterExit=yes

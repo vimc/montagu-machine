@@ -5,7 +5,7 @@ set -e
 apt-get update
 apt-get install -y unattended-upgrades curl
 
-tee /etc/apt/apt.conf.d/20auto-upgrades <<EOF > /dev/null
+cat <<EOF > /etc/apt/apt.conf.d/20auto-upgrades
 APT::Periodic::Update-Package-Lists "1";
 APT::Periodic::Unattended-Upgrade "1";
 EOF
@@ -19,7 +19,7 @@ sed -i 's|//Unattended-Upgrade::Automatic-Reboot "false"|Unattended-Upgrade::Aut
 
 # See https://help.ubuntu.com/community/AutomaticSecurityUpdates for documentation:
 
-tee /etc/apt/apt.conf.d/10periodic <<EOF > /dev/null
+cat <<EOF > /etc/apt/apt.conf.d/10periodic
 APT::Periodic::Update-Package-Lists "1";
 APT::Periodic::Download-Upgradeable-Packages "1";
 APT::Periodic::AutocleanInterval "1";
@@ -38,7 +38,7 @@ fi
 vault login -method=github
 SLACK_WEBHOOK=$(vault read -field=password secret/slack/autoupdate-webhook)
 
-tee /usr/local/sbin/check_reboot_required.sh <<EOF > /dev/null
+cat <<EOF > /usr/local/sbin/check_reboot_required.sh
 #!/bin/sh
 
 if [ -f /var/run/reboot-required ]; then
@@ -55,9 +55,8 @@ if [ -f /var/run/reboot-required ]; then
   curl -X POST -H 'Content-type: application/json' -d "{ \"text\":\"A reboot is required on "\${hostname}".montagu.dide.ic.ac.uk following automatic updates.\"}" https://hooks.slack.com/services/$SLACK_WEBHOOK
 
 fi
-
 EOF
 
-chmod 744 /usr/local/sbin/check_reboot_required.sh
+chmod 755 /usr/local/sbin/check_reboot_required.sh
 
 crontab -l | { cat; echo "00 00 * * * /usr/local/sbin/check_reboot_required.sh"; } | crontab -

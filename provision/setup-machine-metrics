@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -ex
+
+if [ -f /etc/systemd/system/machine-metrics.service ]; then
+    echo "machine-metrics service already installed"
+    exit 0
+fi
+
+WORKDIR=$(mktemp -d)
+
+function finish {
+    rm -rf $WORKDIR
+}
+trap finish EXIT
+
+git clone https://github.com/vimc/machine-metrics.git $WORKDIR
+(cd "${WORKDIR}" && sudo -H ./install)

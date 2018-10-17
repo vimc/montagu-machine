@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -x
+set -ex
 
 if which -a pip3 > /dev/null; then
     echo "pip is already installed (for Python 3)"
