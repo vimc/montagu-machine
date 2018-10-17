@@ -2,7 +2,7 @@
 set -e
 HERE=$(dirname $(realpath $0))
 
-if [ $# -neq 1 ]; then
+if [ ! $# -eq 1 ]; then
     echo "Usage: destroy-disk <name>"
     exit 1
 fi
