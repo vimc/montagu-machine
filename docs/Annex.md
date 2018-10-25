@@ -19,14 +19,12 @@ sudo apt upgrade
 sudo reboot now
 
 sudo su montagu
-docker start barman-montagu
-docker exec barman-montagu setup-barman --no-initial-backup
 cd montagu-db-backup && ./start-metrics.sh
 cd montagu-bb8/bb8 && ./starport-metrics/run
 
 ```
-Annex database will resume automatically. Cron job will continue running as per
-usual. Our goal is to have Barman resuming automatically also, but as yet this does not work. See https://vimc.myjetbrains.com/youtrack/issue/VIMC-2116
+Annex database and barman will resume automatically. Cron job will continue running as per
+usual.
 
 We couldn't upgrade because VirtualBox was running. If so, you may find this
 untested script that should hibernate all VirtualBox VMs that are running. You
