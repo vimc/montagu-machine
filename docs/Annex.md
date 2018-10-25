@@ -20,7 +20,7 @@ sudo reboot now
 
 sudo su montagu
 cd montagu-db-backup && ./start-metrics.sh
-cd montagu-bb8/bb8 && ./starport-metrics/run
+cd montagu-bb8/bb8 && ./starport-metrics/run /home/montagu/starport
 
 ```
 Annex database and barman will resume automatically. Cron job will continue running as per
