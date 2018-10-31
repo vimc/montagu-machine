@@ -2,6 +2,8 @@
 
 set -e
 
+CHANNEL=${CHANNEL:-monitor-hook}
+
 apt-get update
 apt-get install -y unattended-upgrades curl
 
@@ -36,9 +38,9 @@ if [ "$VAULT_AUTH_GITHUB_TOKEN" = "" ]; then
     export VAULT_AUTH_GITHUB_TOKEN=${token}
 fi
 vault login -method=github
-SLACK_WEBHOOK=$(vault read -field=value secret/slack/monitor-webhook)
+SLACK_WEBHOOK=$(vault read -field=value secret/slack/$(CHANNEL))
 
-cat <<EOF > /usr/local/sbin/check_reboot_required.sh
+cat <<EOF > /etc/cron.daily/check_reboot_required
 #!/bin/sh
 
 if [ -f /var/run/reboot-required ]; then
@@ -52,11 +54,9 @@ if [ -f /var/run/reboot-required ]; then
     hostname="annex"
   fi
 
-  curl -X POST -H 'Content-type: application/json' -d "{ \"text\":\"A reboot is required on "\${hostname}".montagu.dide.ic.ac.uk following automatic updates.\"}" https://hooks.slack.com/services/$SLACK_WEBHOOK
+  curl -X POST -H 'Content-type: application/json' -d "{ \"username\":\"reboot-bot\", \"icon_emoji\":\":boot:\", \"text\":\"A reboot is required on "\${hostname}".montagu.dide.ic.ac.uk following automatic updates.\"}" https://hooks.slack.com/services/$SLACK_WEBHOOK
 
 fi
 EOF
 
-chmod 755 /usr/local/sbin/check_reboot_required.sh
-
-crontab -l | { cat; echo "00 00 * * * /usr/local/sbin/check_reboot_required.sh"; } | crontab -
+chmod 755 /etc/cron.daily/check_reboot_required
