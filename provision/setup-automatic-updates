@@ -38,7 +38,7 @@ if [ "$VAULT_AUTH_GITHUB_TOKEN" = "" ]; then
     export VAULT_AUTH_GITHUB_TOKEN=${token}
 fi
 vault login -method=github
-SLACK_WEBHOOK=$(vault read -field=value secret/slack/$(CHANNEL))
+SLACK_WEBHOOK=$(vault read -field=value secret/slack/$CHANNEL)
 
 cat <<EOF > /etc/cron.daily/check_reboot_required
 #!/bin/sh
