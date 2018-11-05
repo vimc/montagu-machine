@@ -1,3 +1,4 @@
 staging/disk
 staging/shared/vault_config
 .vagrant
+.idea
