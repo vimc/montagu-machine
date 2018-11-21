@@ -41,7 +41,7 @@ vault login -method=github
 SLACK_WEBHOOK=$(vault read -field=value secret/slack/monitor-webhook)
 
 cat <<EOF > /etc/cron.daily/check_reboot_required
-#!/bin/sh
+#!/usr/bin/env bash
 
 if [ -f /var/run/reboot-required ]; then
 
