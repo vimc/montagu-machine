@@ -6,7 +6,7 @@ Host fingerprint (ECDSA): `SHA256:etgLOXa8brU/0SsfYfoFwsNW3ljbkLPd3okPJlICN6A`
 ## Services
 * [TeamCity](https://github.com/vimc/montagu-ci) 
   (via vagrant, installed as a systemd service as `montagu-ci`)
-* [Staging](https://github.com/vimc/montagu/tree/master/staging)
+* [Staging](https://github.com/vimc/montagu-machine/tree/master/staging)
   (via vagrant, installed as a systemd service as `montagu-staging`)
 * [Docker registry](https://github.com/vimc/montagu-registry) 
   (as Docker container)
