@@ -1,6 +1,21 @@
 #!/usr/bin/env bash
 
+if [ ! -f ~/.ssh/id_rsa ]; then
+    echo "Writing ssh key to access support"
+    vault login -method=github
+    vault read -field=value secret/vimc-robot/id_rsa.pub > ~/.ssh/id_rsa.pub
+    vault read -field=value secret/vimc-robot/id_rsa > ~/.ssh/id_rsa
+fi
 
+if [ ! -f ~/.ssh/known_hosts ]; then
+    echo "Writing support in known_hosts"
+    ssh-keyscan support.montagu.dide.ic.ac.uk > ~/.ssh/known_hosts
+fi
 
+echo "sshing to support"
+ssh vagrant@support.montagu.dide.ic.ac.uk
+
+echo "Running local deploy script"
+./montagu-machine/staging/scripts/deploy-latest-local
 
 
