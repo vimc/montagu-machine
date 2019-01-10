@@ -59,3 +59,5 @@ else
     # NOTE: if we ever run deploy here we need to be careful about
     # sudo, groups and docker membership.
 fi
+
+echo "finished setting up montagu"

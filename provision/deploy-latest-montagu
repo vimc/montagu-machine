@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -e
+
+echo "deploying latest montagu "
+
+NAME=$(hostname)
+MONTAGU_PATH=~/montagu
+
+if [ ! -f /vagrant/vault_config ]; then
+    echo "Run restore-prepare.sh on host"
+    exit 1
+fi
+
+. /vagrant/vault_config
+export VAULT_ADDR VAULT_AUTH_GITHUB_TOKEN
+
+git -C $MONTAGU_PATH checkout master
+git -C $MONTAGU_PATH submodule update --recursive
+
+(cd $MONTAGU_PATH && sudo -E ./src/deploy.py)
+
+echo "finished deploying latest montagu"

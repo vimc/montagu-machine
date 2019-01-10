@@ -22,21 +22,25 @@ permanent = [
     :ip => '192.168.81.11',
     :port => 10443,
     :dbport => 15432,
-    :autostart => true
+    :autostart => true,
+    :deploylatest => false
   },
   {
     :hostname => 'science',
     :ip => '192.168.81.12',
     :port => 11443,
     :dbport => 5432,
-    :autostart => true
+    :autostart => true,
+    :deploylatest => false
   },
   {
-    :hostname => 'restore-test',
-    :ip => '192.168.81.13',
-    :port => 20443,
-    :dbport => 25432,
-    :autostart => false
+    :hostname => 'latest',
+    :ip => '192.168.81.14',
+    :port => 12443,
+    :dbport => 35432,
+    :metricsport => 9115,
+    :autostart => true,
+    :deploylatest => true
   }
 ]
 
@@ -90,6 +94,14 @@ Vagrant.configure(2) do |config|
         shell.path = 'provision/setup-montagu'
         shell.env = vault_config
         shell.privileged = false
+      end
+
+      if machine[:deploylatest]
+         machine_config.vm.provision :shell do |shell|
+           shell.path = 'provision/deploy-latest-montagu'
+           shell.env = vault_config
+           shell.privileged = false
+         end
       end
     end
   end
