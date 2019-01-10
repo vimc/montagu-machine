@@ -12,7 +12,7 @@ if [ ! -f ~/.ssh/known_hosts ]; then
     ssh-keyscan support.montagu.dide.ic.ac.uk > ~/.ssh/known_hosts
 fi
 
-echo "sshing to support"
+echo "sshing to support..."
 ssh vagrant@support.montagu.dide.ic.ac.uk
 
 echo "Running local deploy script"
