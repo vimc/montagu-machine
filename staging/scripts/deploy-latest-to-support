@@ -12,13 +12,7 @@ else
 fi
 
 echo "sshing to support..."
-ssh vagrant@support.montagu.dide.ic.ac.uk
+ssh vagrant@support.montagu.dide.ic.ac.uk './montagu-machine/staging/scripts/deploy-latest-local'
 
-echo $HOSTNAME
-echo "dir contents:"
-ls
-
-echo "Running local deploy script"
-./montagu-machine/staging/scripts/deploy-latest-local
 
 
