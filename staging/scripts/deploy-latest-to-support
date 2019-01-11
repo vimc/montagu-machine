@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+echo "Running deploy latest to support"
+
 if [ ! -f ~/.ssh/id_rsa ]; then
     echo "Writing ssh key to access support"
     vault login -method=github
