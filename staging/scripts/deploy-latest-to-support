@@ -14,6 +14,7 @@ fi
 echo "sshing to support..."
 ssh vagrant@support.montagu.dide.ic.ac.uk
 
+echo $HOSTNAME
 echo "dir contents:"
 ls
 
