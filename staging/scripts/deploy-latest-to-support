@@ -2,6 +2,9 @@
 
 echo "Running deploy latest to support"
 
+echo "Contents of .ssh:"
+(cd ~/.ssh && ls)
+
 if [ ! -f ~/.ssh/id_rsa ]; then
     echo "Writing ssh key to access support"
     vault login -method=github
