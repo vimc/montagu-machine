@@ -2,8 +2,20 @@
 
 echo "Running deploy latest to support"
 
+SUPPORTHOST=$(ssh-keyscan support.montagu.dide.ic.ac.uk)
+if [ ! -f ~/.ssh/known_hosts ]; then
+    echo "Writing support in new known_hosts"
+    echo $SUPPORTHOST > ~/.ssh/known_hosts
+else
+    echo "Checking support exists in known_hosts"
+    grep -q -F "$SUPPORTHOST" ~/.ssh/known_hosts || echo $SUPPORTHOST >> ~/.ssh/known_hosts
+fi
+
 echo "sshing to support..."
 ssh vagrant@support.montagu.dide.ic.ac.uk
+
+echo "dir contents:"
+ls
 
 echo "Running local deploy script"
 ./montagu-machine/staging/scripts/deploy-latest-local
