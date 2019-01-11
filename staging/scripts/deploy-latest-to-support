@@ -19,6 +19,6 @@ echo "dir contents:"
 ls
 
 echo "Running local deploy script"
-./staging/scripts/deploy-latest-local
+./montagu-machine/staging/scripts/deploy-latest-local
 
 
