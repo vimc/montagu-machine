@@ -22,6 +22,7 @@ permanent = [
     :ip => '192.168.81.11',
     :port => 10443,
     :dbport => 15432,
+    :metricsport => 9113,
     :autostart => true,
     :deploylatest => false
   },
@@ -30,6 +31,7 @@ permanent = [
     :ip => '192.168.81.12',
     :port => 11443,
     :dbport => 5432,
+    :metricsport => 9114,
     :autostart => true,
     :deploylatest => false
   },
@@ -83,6 +85,8 @@ Vagrant.configure(2) do |config|
                                 host: machine[:port]
       machine_config.vm.network "forwarded_port", guest: 5432,
                                 host: machine[:dbport]
+      machine_config.vm.network "forwarded_port", guest: 9113,
+                                host: machine[:metricsport]
       machine_config.vm.provision :shell do |shell|
         shell.path = 'provision/setup-hostname'
         shell.args = machine[:hostname]
