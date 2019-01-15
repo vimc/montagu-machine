@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+#TODO: rationalise this with deploy-latest-montagu script currently in the i2474 branch, which does basically the same
+#thing. That script could call this one, or this could default to master/latest
+
+set -e
+
+BRANCH=${1:'master'}
+echo "deploying montagu branch $BRANCH"
+
+NAME=$(hostname)
+MONTAGU_PATH=~/montagu
+
+if [ ! -f /vagrant/vault_config ]; then
+    echo "Run restore-prepare.sh on host"
+    exit 1
+fi
+
+. /vagrant/vault_config
+export VAULT_ADDR VAULT_AUTH_GITHUB_TOKEN
+
+git -C $MONTAGU_PATH checkout $BRANCH
+git -C $MONTAGU_PATH submodule update --recursive
+
+(cd $MONTAGU_PATH && sudo -E ./src/deploy.py)
+
+echo "finished deploying montagu branch $BRANCH"
+

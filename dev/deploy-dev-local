@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -e
+
+BRANCH=${1:'master'}
+
+vagrant destroy dev -f
+
+(cd ../staging/scripts && ./destroy-disk dev)
+
+vagrant up dev
+
+vagrant ssh

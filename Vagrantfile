@@ -34,12 +34,13 @@ permanent = [
     :autostart => true
   },
   {
-    :hostname => 'restore-test',
-    :ip => '192.168.81.13',
-    :port => 20443,
-    :dbport => 25432,
-    :metricsport => 9115,
-    :autostart => false
+    :hostname => 'dev',
+    :ip => '192.168.81.15',
+    :port => 13443,
+    :dbport => 45432,
+    :metricsport => 9116,
+    :autostart => false,
+    :deploylatest => false
   }
 ]
 
