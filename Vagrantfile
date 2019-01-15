@@ -43,7 +43,6 @@ permanent = [
     :metricsport => 9115,
     :autostart => true,
     :deploylatest => true
-    :autostart => true
   }
 ]
 
