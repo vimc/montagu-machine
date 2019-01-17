@@ -13,6 +13,13 @@ Host fingerprint (ECDSA): `SHA256:etgLOXa8brU/0SsfYfoFwsNW3ljbkLPd3okPJlICN6A`
 * [Vault](https://github.com/vimc/montagu-vault) (as Docker container)
 * [Montagu-Monitor](https://github.com/vimc/montagu-monitor)
 
+## Users
+
+* The `vagrant` user is needed to control the virtual machines - `science`, `uat`, `latest`, and the CI system.
+* The `montagu` user is used to control services that are dockerised (though these can also be controlled from fresh clones in any user's directory)
+
+The passwords for these users are in the vault at `/secret/support/passwords/<user>` (stored under the `value` key), but these should be unnecessary for almost all actions.
+
 ## Upgrading and rebooting
 ### Graceful shutdown
 Everything will shutdown gracefully on host system shutdown. The Vagrant VMs
