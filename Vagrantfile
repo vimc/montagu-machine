@@ -24,7 +24,6 @@ permanent = [
     :dbport => 15432,
     :metricsport => 9113,
     :autostart => true,
-    :deploylatest => false
   },
   {
     :hostname => 'science',
@@ -32,8 +31,7 @@ permanent = [
     :port => 11443,
     :dbport => 5432,
     :metricsport => 9114,
-    :autostart => true,
-    :deploylatest => false
+    :autostart => true
   },
   {
     :hostname => 'latest',
@@ -100,7 +98,7 @@ Vagrant.configure(2) do |config|
         shell.privileged = false
       end
 
-      if machine[:deploylatest]
+      if machine.key?(:deploylatest) and machine[:deploylatest]
          machine_config.vm.provision :shell do |shell|
            shell.path = 'provision/deploy-latest-montagu'
            shell.env = vault_config
