@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+echo "Running deploy latest to support"
+
+echo "sshing to support..."
+ssh vagrant@support.montagu.dide.ic.ac.uk 'echo "$HOSTNAME";cd montagu-machine;./staging/scripts/deploy-latest-local'
