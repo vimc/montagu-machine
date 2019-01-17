@@ -4,14 +4,15 @@ support.montagu.dide.ic.ac.uk
 Host fingerprint (ECDSA): `SHA256:etgLOXa8brU/0SsfYfoFwsNW3ljbkLPd3okPJlICN6A`
 
 ## Services
+
 * [TeamCity](https://github.com/vimc/montagu-ci) 
   (via vagrant, installed as a systemd service as `montagu-ci`)
 * [Staging](https://github.com/vimc/montagu-machine/tree/master/staging)
   (via vagrant, installed as a systemd service as `montagu-staging`)
 * [Docker registry](https://github.com/vimc/montagu-registry) 
-  (as Docker container)
-* [Vault](https://github.com/vimc/montagu-vault) (as Docker container)
-* [Montagu-Monitor](https://github.com/vimc/montagu-monitor)
+  (as Docker container, control from `~montagu/registry`)
+* [Vault](https://github.com/vimc/montagu-vault) (as Docker container, control from `~montagu/vault`)
+* [Montagu-Monitor](https://github.com/vimc/montagu-monitor) (as Docker container, control from `~montagu/monitor`)
 
 ## Users
 
@@ -47,4 +48,3 @@ You can check things are working by:
 1. Staging: Browsing to the instances: [URLs](https://github.com/vimc/montagu/blob/master/staging/README.md#access-the-stage-instances)
 1. Vault: If you were able to unseal it, then it's up
 1. Monitor: Go to http://support.montagu.dide.ic.ac.uk:9090/
-
