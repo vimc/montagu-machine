@@ -5,7 +5,7 @@ In order to spin up a local VM for testing deployment of montagu locally, run th
 If you haven't already done so, set up Vagrant locally with 
 
 ```
-./provision/setup-vagrant
+sudo ./provision/setup-vagrant
 ``` 
 
 To start the dev VM, run
