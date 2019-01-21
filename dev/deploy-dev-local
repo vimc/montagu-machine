@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 
-set -e
+#set -ex
 
-BRANCH=${1:'master'}
+export MONTAGU_VM_BRANCH=${1:-'latest'}
 
 vagrant destroy dev -f
 
-(cd ../staging/scripts && ./destroy-disk dev)
+(cd staging/scripts && ( ./destroy-disk dev || echo "dev disk not found" ))
 
 vagrant up dev
-
-vagrant ssh

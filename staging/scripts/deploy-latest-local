@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -e
+
+vagrant destroy latest -f
+
+(cd staging/scripts && ./destroy-disk latest)
+
+vagrant up latest

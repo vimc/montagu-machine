@@ -23,7 +23,7 @@ permanent = [
     :port => 10443,
     :dbport => 15432,
     :metricsport => 9113,
-    :autostart => true
+    :autostart => true,
   },
   {
     :hostname => 'science',
@@ -34,13 +34,22 @@ permanent = [
     :autostart => true
   },
   {
+    :hostname => 'latest',
+    :ip => '192.168.81.14',
+    :port => 12443,
+    :dbport => 35432,
+    :metricsport => 9115,
+    :autostart => true,
+    :deploymontagu => 'latest'
+  },
+  {
     :hostname => 'dev',
     :ip => '192.168.81.15',
     :port => 13443,
     :dbport => 45432,
     :metricsport => 9116,
     :autostart => false,
-    :deploylatest => false
+    :deploymontagu => 'branch'
   }
 ]
 
@@ -96,6 +105,23 @@ Vagrant.configure(2) do |config|
         shell.path = 'provision/setup-montagu'
         shell.env = vault_config
         shell.privileged = false
+      end
+
+      # Should machine provisioning include deploying montagu, either latest or named branch?
+      if machine.key?(:deploymontagu) and ['latest','branch'].include? machine[:deploymontagu]
+        machine_config.vm.provision :shell do |shell|
+          if machine[:deploymontagu] == 'latest'
+            shell.path = 'provision/deploy-latest-montagu'
+          end
+          if machine[:deploymontagu] == 'branch'
+            shell.path = 'provision/deploy-montagu-branch'
+            # Expect this vagrant environment variable to be set to desired branch on host machine
+            # (or allow default to latest branch)
+            shell.args = [ENV["MONTAGU_VM_BRANCH"] || '']
+          end
+          shell.env = vault_config
+          shell.privileged = false
+        end
       end
     end
   end

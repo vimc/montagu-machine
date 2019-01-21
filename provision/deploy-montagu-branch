@@ -1,11 +1,8 @@
 #!/usr/bin/env bash
 
-#TODO: rationalise this with deploy-latest-montagu script currently in the i2474 branch, which does basically the same
-#thing. That script could call this one, or this could default to master/latest
-
 set -e
 
-BRANCH=${1:'master'}
+BRANCH=${1:-'latest'}
 echo "deploying montagu branch $BRANCH"
 
 NAME=$(hostname)
