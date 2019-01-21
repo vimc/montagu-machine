@@ -19,6 +19,6 @@ export VAULT_ADDR VAULT_AUTH_GITHUB_TOKEN
 git -C $MONTAGU_PATH checkout latest
 git -C $MONTAGU_PATH submodule update --recursive
 
-(cd $MONTAGU_PATH && sudo -E ./src/deploy.py)
+./src/deploy.py
 
 echo "finished deploying latest montagu"
