@@ -1,8 +1,20 @@
 #!/usr/bin/env bash
 set -e
 
+# This script is designed to run from support  and arranges for
+# the vagrant vm to deploy latest
+#
+# It is called by deploy-latest-to-support which runs on teamcity
+#
+# We can't do this as part of deploy because otherwise the vagrant
+# user has not been properly added to the docker group.
+HERE=$(dirname $(realpath $0))
+MONTAGU_MACHINE_ROOT=$(realpath $HERE/../..)
+cd $MONTAGU_MACHINE_ROOT
+
 vagrant destroy latest -f
 
-(cd staging/scripts && ./destroy-disk latest)
+./destroy-disk latest
 
 vagrant up latest
+vagrant ssh latest /vagrant/deploy-latest-montagu
