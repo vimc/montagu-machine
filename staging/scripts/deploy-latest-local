@@ -17,4 +17,3 @@ vagrant destroy latest -f
 ./destroy-disk latest
 
 vagrant up latest
-vagrant ssh latest /vagrant/deploy-latest-montagu
