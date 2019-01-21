@@ -18,10 +18,8 @@ if [ ! -f ~/.docker/config.json ]; then
     # of adding the vagrant user to docker has not yet happened.  So
     # here we need to elevate privledges in order to use docker.
     vault read -field=password /secret/registry/vimc | \
-        sudo docker login -u vimc --password-stdin \
+        docker login -u vimc --password-stdin \
              docker.montagu.dide.ic.ac.uk:5000
-    US=$USER
-    sudo chown -R "$US:$US" ~/.docker
 fi
 
 if [ ! -f ~/.ssh/id_rsa ]; then

@@ -1,6 +1,6 @@
-# Older versions of vagrant can't start the ubuntu bentobox with
-# private networking
-Vagrant.require_version ">= 1.8.2"
+# Need a recent version for the 'reset' functionality which fixes
+# docker permissions for us
+Vagrant.require_version ">= 2.2.3"
 
 domain = 'localdomain'
 box = "bento/ubuntu-16.04"
@@ -58,6 +58,7 @@ Vagrant.configure(2) do |config|
     shell.path = 'provision/setup-docker'
     shell.args = ['vagrant']
     shell.env = {"DOCKER_LARGE_DISK" => "/mnt/data"}
+    shell.reset = true
   end
   config.vm.provision :shell do |shell|
     shell.path = 'provision/setup-pip'
