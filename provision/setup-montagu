@@ -53,8 +53,6 @@ else
     pip3 install --user -r ${MONTAGU_PATH}/src/requirements.txt
     cp ${MONTAGU_PATH}/settings/${CONFIG_NAME}.json \
        ${MONTAGU_PATH}/src/montagu-deploy.json
-    # NOTE: if we ever run deploy here we need to be careful about
-    # sudo, groups and docker membership.
 fi
 
 echo "finished setting up montagu"
