@@ -39,7 +39,8 @@ permanent = [
     :port => 12443,
     :dbport => 35432,
     :metricsport => 9115,
-    :autostart => true
+    :autostart => true,
+    :deploylatest => true
   }
 ]
 
@@ -96,6 +97,14 @@ Vagrant.configure(2) do |config|
         shell.path = 'provision/setup-montagu'
         shell.env = vault_config
         shell.privileged = false
+      end
+
+      if machine.key?(:deploylatest) and machine[:deploylatest]
+        machine_config.vm.provision :shell do |shell|
+          shell.path = 'staging/shared/deploy-latest-montagu'
+          shell.env = vault_config
+          shell.privileged = false
+        end
       end
     end
   end
