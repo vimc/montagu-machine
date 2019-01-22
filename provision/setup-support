@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
-adduser --disabled-password --ingroup montagu
+## The '--gecos ""' bit lets this run noninteractively
+adduser --gecos "" --disabled-password montagu
+usermod -aG docker montagu
 
 # Warning: these instructions are currently aspirational
 sudo -u montagu git clone https://github.com/vimc/montagu-registry \
