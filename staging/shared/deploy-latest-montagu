@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
-# This script runs on the VM itself.  It could be done during
-# provisioning, in theory, but this is prone to issues with sudo,
-# especially because it seems hard to get the vagrant user to pick up
-# the docker group during provisioning.
+# This script runs on the VM itself.  It can be run during
+# provisioning (as for latest) or later on (as
+# /vagrant/deploy-latest-montagu)
 
 NAME=$(hostname)
 MONTAGU_PATH=~/montagu
