@@ -12,3 +12,9 @@ sudo -u montagu git clone --recursive https://github.com/vimc/montagu-monitor \
      ~montagu/monitor
 sudo -u montagu git clone https://github.com/vimc/montagu-vault \
      ~montagu/vault
+
+adduser --gecos "" --disabled-password vagrant
+sudo -u vagrant git clone https://github.com/vimc/montagu-machine \
+     ~vagrant/montagu-machine
+sudo -u vagrant git clone https://github.com/vimc/montagu-ci \
+     ~vagrant/montagu-ci
