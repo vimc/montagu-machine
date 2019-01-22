@@ -50,6 +50,7 @@ else
     pip3 install --user -r ${MONTAGU_PATH}/src/requirements.txt
     cp ${MONTAGU_PATH}/settings/${CONFIG_NAME}.json \
        ${MONTAGU_PATH}/src/montagu-deploy.json
+    sudo ${MONTAGU_PATH}/montagu-bb8/bb8/bb8_link_write
 fi
 
 echo "finished setting up montagu"
