@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
+set -e
 
-#set -ex
+export BRANCH=${1:-'latest'}
 
-export MONTAGU_VM_BRANCH=${1:-'latest'}
+HERE=$(dirname $(realpath $0))
+MONTAGU_MACHINE_ROOT=$(realpath $HERE/..)
+cd $MONTAGU_MACHINE_ROOT
 
 vagrant destroy dev -f
 
-(cd staging/scripts && ( ./destroy-disk dev || echo "dev disk not found" ))
+if [ -f staging/disk/dev.vdi ]; then
+  ./staging/scripts/destroy-disk dev
+fi
 
 vagrant up dev
