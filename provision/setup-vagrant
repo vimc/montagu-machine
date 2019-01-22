@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 set -e
 VIRTUALBOX_VERSION=5.2
-VAGRANT_VERSION=2.1.5
+VAGRANT_VERSION=2.2.3
 VAGRANT_DEB=vagrant_${VAGRANT_VERSION}_x86_64.deb
 VAGRANT_URL=https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/${VAGRANT_DEB}
+
+if [ -z $SUDO_USER ]; then
+    echo "Run this command with sudo"
+    exit 1
+fi
 
 if command -v VBoxManage > /dev/null; then
     echo "Virtualbox already installed"
@@ -34,5 +39,12 @@ else
     curl -LO $VAGRANT_URL
     sudo dpkg -i $VAGRANT_DEB
     rm -f $VAGRANT_DEB
-    vagrant plugin install vagrant-persistent-storage
+fi
+
+if sudo -u $SUDO_USER -H -E vagrant plugin list |
+        grep -q vagrant-persistent-storage; then
+    echo "vagrant-persistent-storage already installed"
+else
+    echo "Installing vagrant-persistent-storage"
+    sudo -u $SUDO_USER -H -E vagrant plugin install vagrant-persistent-storage
 fi

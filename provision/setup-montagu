@@ -13,16 +13,10 @@ CONFIG_NAME=$(hostname)
 
 vault login -method=github
 
-if [ ! -f /root/.docker/config.json ]; then
-    vault read -field=password /secret/registry/vimc | \
-        sudo -H docker login -u vimc --password-stdin \
-             docker.montagu.dide.ic.ac.uk:5000
-fi
-
 if [ ! -f ~/.docker/config.json ]; then
     vault read -field=password /secret/registry/vimc | \
-        sudo docker login -u vimc --password-stdin \
-               docker.montagu.dide.ic.ac.uk:5000
+        docker login -u vimc --password-stdin \
+             docker.montagu.dide.ic.ac.uk:5000
 fi
 
 if [ ! -f ~/.ssh/id_rsa ]; then
@@ -56,8 +50,7 @@ else
     pip3 install --user -r ${MONTAGU_PATH}/src/requirements.txt
     cp ${MONTAGU_PATH}/settings/${CONFIG_NAME}.json \
        ${MONTAGU_PATH}/src/montagu-deploy.json
-    # NOTE: if we ever run deploy here we need to be careful about
-    # sudo, groups and docker membership.
+    sudo ${MONTAGU_PATH}/montagu-bb8/bb8/bb8_link_write
 fi
 
 echo "finished setting up montagu"

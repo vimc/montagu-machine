@@ -13,10 +13,4 @@ HERE=$(dirname $(realpath $0))
 MONTAGU_MACHINE_ROOT=$(realpath $HERE/../..)
 cd $MONTAGU_MACHINE_ROOT
 
-vagrant destroy latest -f
-
-if [ -f staging/disk/latest.vdi ]; then
-    ./staging/scripts/destroy-disk latest
-fi
-
-vagrant up latest
+./staging/scripts/deploy-local-vm latest

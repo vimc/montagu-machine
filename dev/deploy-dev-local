@@ -3,14 +3,10 @@ set -e
 
 export BRANCH=${1:-'latest'}
 
+echo "Building local dev VM with branch: $BRANCH"
+
 HERE=$(dirname $(realpath $0))
 MONTAGU_MACHINE_ROOT=$(realpath $HERE/..)
 cd $MONTAGU_MACHINE_ROOT
 
-vagrant destroy dev -f
-
-if [ -f staging/disk/dev.vdi ]; then
-  ./staging/scripts/destroy-disk dev
-fi
-
-vagrant up dev
+./staging/scripts/deploy-local-vm dev
