@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
+set -e
+
 echo "Running deploy latest to support"
 
+# This script is designed to run from teamcity and arranges for
+# *support* to deploy latest.
+#
+# It will call deploy-latest-local
 echo "sshing to support..."
-ssh vagrant@support.montagu.dide.ic.ac.uk 'echo "$HOSTNAME";cd montagu-machine;./staging/scripts/deploy-latest-local'
+ssh vagrant@support.montagu.dide.ic.ac.uk './montagu-machine/staging/scripts/deploy-latest-local'

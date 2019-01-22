@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
 set -e
 
-echo "deploying latest montagu "
+# This script runs on the VM itself.  It can be run during
+# provisioning (as for latest) or later on (as
+# /vagrant/deploy-latest-montagu)
 
 NAME=$(hostname)
 MONTAGU_PATH=~/montagu
+VERSION=${1:-latest}
+
+echo "deploying montagu '$VERSION' onto '$NAME'"
 
 # We shouldn't need to do this anymore after we've completed this ticket to stop using GitHub auth for vault from servers:
 #  https://vimc.myjetbrains.com/youtrack/issue/VIMC-2507
@@ -16,9 +21,9 @@ fi
 . /vagrant/vault_config
 export VAULT_ADDR VAULT_AUTH_GITHUB_TOKEN
 
-git -C $MONTAGU_PATH checkout latest
+git -C $MONTAGU_PATH checkout $VERSION
 git -C $MONTAGU_PATH submodule update --recursive
 
-(cd $MONTAGU_PATH && sudo -E ./src/deploy.py)
+$MONTAGU_PATH/src/deploy.py
 
-echo "finished deploying latest montagu"
+echo "finished deploying montagu"
