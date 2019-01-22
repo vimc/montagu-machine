@@ -14,6 +14,8 @@ cd $MONTAGU_MACHINE_ROOT
 
 vagrant destroy latest -f
 
-./destroy-disk latest
+if [ -f staging/disk/latest ]; then
+    ./staging/scripts/destroy-disk latest
+fi
 
 vagrant up latest
