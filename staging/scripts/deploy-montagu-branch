@@ -3,11 +3,16 @@ set -e
 
 # This script runs on the VM itself.
 
+if [ $# -ne 1 ]; then
+    echo "Usage: deploy-montagu-branch <ref>"
+    exit 1
+fi
+
 NAME=$(hostname)
 MONTAGU_PATH=~/montagu
-BRANCH=${1:-'latest'}
+REF=$1
 
-echo "deploying montagu '$BRANCH' onto '$NAME'"
+echo "deploying montagu '$REF' onto '$NAME'"
 
 # We shouldn't need to do this anymore after we've completed this ticket to stop using GitHub auth for vault from servers:
 #  https://vimc.myjetbrains.com/youtrack/issue/VIMC-2507
@@ -19,10 +24,10 @@ fi
 . /vagrant/vault_config
 export VAULT_ADDR VAULT_AUTH_GITHUB_TOKEN
 
-git -C $MONTAGU_PATH checkout $BRANCH
+git -C $MONTAGU_PATH checkout $REF
 git -C $MONTAGU_PATH submodule update --recursive
 
 $MONTAGU_PATH/src/deploy.py
 
-echo "finished deploying montagu $BRANCH"
+echo "finished deploying montagu $REF"
 

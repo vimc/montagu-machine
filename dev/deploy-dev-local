@@ -1,9 +1,32 @@
 #!/usr/bin/env bash
 set -e
 
-export BRANCH=${1:-'latest'}
+if [ $# -gt 2 ]; then
+    echo "Usage: deploy-dev-local <ref> [--prevent-deploy]"
+    exit 1
+fi
 
-echo "Building local dev VM with branch: $BRANCH"
+PREVENT_DEPLOY_OPTION="--prevent-deploy"
+
+if [ "$1" ==  $PREVENT_DEPLOY_OPTION ] || [ "$2" == $PREVENT_DEPLOY_OPTION ]; then
+  PREVENT_DEPLOY=true
+else
+  PREVENT_DEPLOY=false
+fi
+
+if [ "$1" != "" ]  && [ "$1" != $PREVENT_DEPLOY_OPTION ]; then
+  REF="$1"
+else
+  REF="latest"
+fi
+
+export REF
+export PREVENT_DEPLOY
+
+echo "Building local dev VM with branch: $REF"
+if [ $PREVENT_DEPLOY = true ]; then
+  echo "Preventing montagu deploy"
+fi
 
 HERE=$(dirname $(realpath $0))
 MONTAGU_MACHINE_ROOT=$(realpath $HERE/..)

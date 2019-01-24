@@ -110,20 +110,26 @@ Vagrant.configure(2) do |config|
 
       # Should machine provisioning include deploying montagu, either latest or named branch?
       if machine.key?(:deploymontagu) and ['latest','branch'].include? machine[:deploymontagu]
-        machine_config.vm.provision :shell do |shell|
-          if machine[:deploymontagu] == 'latest'
-            shell.args = 'latest'
-          end
+        # Do not continue with deploy if the calling script has set PREVENT_DEPLOY
+        if ENV['PREVENT_DEPLOY'] != 'true'
+          machine_config.vm.provision :shell do |shell|
+            if machine[:deploymontagu] == 'latest'
+              shell.args = 'latest'
+            end
 
-          if machine[:deploymontagu] == 'branch'
-            # Expect this vagrant environment variable to be set to desired branch on host machine
-            # (or allow default to latest branch)
-            shell.args = [ENV["BRANCH"] || '']
-          end
+            if machine[:deploymontagu] == 'branch'
+              # Expect this vagrant environment variable to be set to desired branch on host machine
+              # (or allow default to latest branch)
+              shell.args = [ENV["REF"] || 'latest']
+            end
 
-          shell.path = 'staging/scripts/deploy-montagu-branch'
-          shell.env = vault_config
-          shell.privileged = false
+            shell.path = 'staging/scripts/deploy-montagu-branch'
+            shell.env = vault_config
+            shell.privileged = false
+          end
+        else
+          machine_config.vm.post_up_message = "Montagu has not been installed on the VM because --prevent-montagu was set. " +
+              "Any branch parameter has been ignored. Remember to checkout the desired branch before you install Montagu."
         end
       end
     end
