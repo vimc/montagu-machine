@@ -2,7 +2,6 @@
 set -e
 
 PATH_DIR=~/.ssh
-PATH_DIR=~/tmp/ssh-test
 PATH_KEY=${PATH_DIR}/id_rsa
 PATH_PUB=${PATH_DIR}/id_rsa.pub
 
