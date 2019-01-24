@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -e
+
+PATH_DIR=~/.ssh
+PATH_DIR=~/tmp/ssh-test
+PATH_KEY=${PATH_DIR}/id_rsa
+PATH_PUB=${PATH_DIR}/id_rsa.pub
+
+if [ -f "$PATH_KEY" ]; then
+    echo "Keys are already set up in $PATH_KEY"
+    exit 0
+fi
+
+export VAULT_ADDR=https://support.montagu.dide.ic.ac.uk:8200
+if [ "$VAULT_AUTH_GITHUB_TOKEN" = "" ]; then
+    echo -n "Please provide your GitHub personal access token for the vault: "
+    read -s token
+    echo ""
+    export VAULT_AUTH_GITHUB_TOKEN=${token}
+fi
+echo "Authenticating with GitHub"
+export VAULT_TOKEN=$(vault login -method=github -token-only)
+
+echo "Configuring ssh"
+mkdir -p "$PATH_DIR"
+vault read -field=value secret/vimc-robot/id_rsa.pub > "$PATH_PUB"
+vault read -field=value secret/vimc-robot/id_rsa > "$PATH_KEY"
+chmod 600 "$PATH_KEY"
+
+echo "Keys written to $PATH_KEY and $PATH_PUB"
