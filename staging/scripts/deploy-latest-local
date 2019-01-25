@@ -5,17 +5,9 @@ set -e
 # the vagrant vm to deploy latest
 #
 # It is called by deploy-latest-to-support which runs on teamcity
-#
-# We can't do this as part of deploy because otherwise the vagrant
-# user has not been properly added to the docker group.
+
 HERE=$(dirname $(realpath $0))
 MONTAGU_MACHINE_ROOT=$(realpath $HERE/../..)
 cd $MONTAGU_MACHINE_ROOT
 
-vagrant destroy latest -f
-
-if [ -f staging/disk/latest.vdi ]; then
-    ./staging/scripts/destroy-disk latest
-fi
-
-vagrant up latest
+./staging/scripts/deploy-local-vm latest

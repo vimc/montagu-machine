@@ -40,7 +40,16 @@ permanent = [
     :dbport => 35432,
     :metricsport => 9115,
     :autostart => true,
-    :deploylatest => true
+    :deploymontagu => 'latest'
+  },
+  {
+    :hostname => 'dev',
+    :ip => '192.168.81.15',
+    :port => 13443,
+    :dbport => 45432,
+    :metricsport => 9116,
+    :autostart => false,
+    :deploymontagu => 'branch'
   }
 ]
 
@@ -99,11 +108,28 @@ Vagrant.configure(2) do |config|
         shell.privileged = false
       end
 
-      if machine.key?(:deploylatest) and machine[:deploylatest]
-        machine_config.vm.provision :shell do |shell|
-          shell.path = 'staging/shared/deploy-latest-montagu'
-          shell.env = vault_config
-          shell.privileged = false
+      # Should machine provisioning include deploying montagu, either latest or named branch?
+      if machine.key?(:deploymontagu) and ['latest','branch'].include? machine[:deploymontagu]
+        # Do not continue with deploy if the calling script has set PREVENT_DEPLOY
+        if ENV['PREVENT_DEPLOY'] != 'true'
+          machine_config.vm.provision :shell do |shell|
+            if machine[:deploymontagu] == 'latest'
+              shell.args = 'latest'
+            end
+
+            if machine[:deploymontagu] == 'branch'
+              # Expect this vagrant environment variable to be set to desired branch on host machine
+              # (or allow default to latest branch)
+              shell.args = [ENV["REF"] || 'latest']
+            end
+
+            shell.path = 'staging/scripts/deploy-montagu-branch'
+            shell.env = vault_config
+            shell.privileged = false
+          end
+        else
+          machine_config.vm.post_up_message = "Montagu has not been installed on the VM because --prevent-deploy was set. " +
+              "Any branch parameter has been ignored. Remember to checkout the desired branch before you install Montagu."
         end
       end
     end

@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -e
+
+# This script is called from both deploy-dev-local and deploy-latest-local, the latter being invoked from teamcity
+
+if [ $# -ne 1 ]; then
+    echo "Usage: deploy-local-vm <name>"
+    exit 1
+fi
+
+MACHINE_NAME=$1
+
+echo "Deploying local Vagrant VM: $MACHINE_NAME"
+
+HERE=$(dirname $(realpath $0))
+MONTAGU_MACHINE_ROOT=$(realpath $HERE/../..)
+cd $MONTAGU_MACHINE_ROOT
+
+echo "Destroying old VM if it has previously been created..."
+vagrant destroy $MACHINE_NAME -f
+
+if [ -f staging/disk/$MACHINE_NAME.vdi ]; then
+    ./staging/scripts/destroy-disk $MACHINE_NAME
+fi
+
+vagrant up $MACHINE_NAME
