@@ -128,7 +128,7 @@ Vagrant.configure(2) do |config|
             shell.privileged = false
           end
         else
-          machine_config.vm.post_up_message = "Montagu has not been installed on the VM because --prevent-montagu was set. " +
+          machine_config.vm.post_up_message = "Montagu has not been installed on the VM because --prevent-deploy was set. " +
               "Any branch parameter has been ignored. Remember to checkout the desired branch before you install Montagu."
         end
       end
