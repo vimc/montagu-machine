@@ -13,6 +13,8 @@ Host fingerprint (ECDSA): `SHA256:etgLOXa8brU/0SsfYfoFwsNW3ljbkLPd3okPJlICN6A`
   (as Docker container, control from `~montagu/registry`)
 * [Vault](https://github.com/vimc/montagu-vault) (as Docker container, control from `~montagu/vault`)
 * [Montagu-Monitor](https://github.com/vimc/montagu-monitor) (as Docker container, control from `~montagu/monitor`)
+* [YouTrack-Integration](https://github.com/reside-ic/youtrack-integration) (as Docker container, control from `~montagu/youtrack-integration`)
+
 
 ## Users
 
@@ -35,10 +37,11 @@ sudo reboot now   # if needed
 ```
 
 ### Resume
-All services exept the Vault restart automatically on boot. So you need to:
+All services except the Vault and the YouTrack webhook restart automatically on boot. So you need to:
 
 1. Start Vault: [Instructions](https://github.com/vimc/montagu-vault#restarting-andor-restoring-the-vault)
 1. Unseal the Vault: [Instructions](https://github.com/vimc/montagu-vault#unsealing-the-vault)
+1. Start the YouTrack webhook: `~montagu/youtrack-integration/run --use-vault`
 
 You can check things are working by:
 
@@ -48,3 +51,4 @@ You can check things are working by:
 1. Staging: Browsing to the instances: [URLs](https://github.com/vimc/montagu/blob/master/staging/README.md#access-the-stage-instances)
 1. Vault: If you were able to unseal it, then it's up
 1. Monitor: Go to http://support.montagu.dide.ic.ac.uk:9090/
+
