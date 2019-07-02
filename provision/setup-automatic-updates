@@ -2,7 +2,7 @@
 
 set -e
 
-CHANNEL=${CHANNEL:-montagu-monitor}
+CHANNEL=${CHANNEL:-montagu-reboot}
 
 apt-get update
 apt-get install -y unattended-upgrades curl
