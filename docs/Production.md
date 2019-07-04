@@ -14,6 +14,7 @@ So to access:
 
 ## Services
 * [Montagu](https://github.com/vimc/montagu)
+* [OrderlyWeb](https://github.com/vimc/orderly-web-deploy) (proxied via Montagu)
 
 ## Upgrading and rebooting
 ### Graceful shutdown
