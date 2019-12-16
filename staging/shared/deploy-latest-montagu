@@ -7,6 +7,7 @@ set -e
 
 NAME=$(hostname)
 MONTAGU_PATH=~/montagu
+ORDERLY_WEB_PATH=~/montagu-orderly-web
 VERSION=${1:-latest}
 
 echo "deploying montagu '$VERSION' onto '$NAME'"
@@ -25,5 +26,10 @@ git -C $MONTAGU_PATH checkout $VERSION
 git -C $MONTAGU_PATH submodule update --recursive
 
 $MONTAGU_PATH/src/deploy.py
+
+echo "deploying OrderlyWeb"
+
+git -C $ORDERLY_WEB_PATH checkout vimc-3127
+(cd $ORDERLY_WEB_PATH && ./setup latest && ./start)
 
 echo "finished deploying montagu"

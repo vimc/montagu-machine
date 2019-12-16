@@ -8,6 +8,7 @@ fi
 
 MONTAGU_PATH=~/montagu
 MONTAGU_ORDERLY_PATH=~/montagu-orderly
+MONTAGU_ORDERLY_WEB_PATH=~/montagu-orderly-web
 MONTAGU_DATA_PATH=~/montagu-data
 CONFIG_NAME=$(hostname)
 
@@ -52,5 +53,14 @@ else
        ${MONTAGU_PATH}/src/montagu-deploy.json
     sudo ${MONTAGU_PATH}/montagu-bb8/bb8/bb8_link_write
 fi
+
+if [ -d ${MONTAGU_ORDERLY_WEB_PATH} ]; then
+    echo "montagu-orderly-web already set up"
+else
+    echo "setting up montagu-orderly-web"
+    git clone https://github.com/vimc/montagu-orderly-web.git $MONTAGU_ORDERLY_WEB_PATH
+fi
+
+pip3 install --user orderly-web
 
 echo "finished setting up montagu"
