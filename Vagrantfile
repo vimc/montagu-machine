@@ -4,7 +4,6 @@ Vagrant.require_version ">= 2.2.3"
 
 domain = 'localdomain'
 box = "bento/ubuntu-16.04"
-ram_size_mb = '16384'
 data_disk_size_gb = 900
 
 vault_config_file = 'staging/shared/vault_config'
@@ -23,7 +22,8 @@ permanent = [
     :port => 10443,
     :dbport => 15432,
     :metricsport => 9113,
-    :autostart => true
+    :autostart => true,
+    :ram_size_mb => '16384'
   },
   {
     :hostname => 'science',
@@ -31,7 +31,8 @@ permanent = [
     :port => 11443,
     :dbport => 5432,
     :metricsport => 9114,
-    :autostart => true
+    :autostart => true,
+    :ram_size_mb => '24576'
   },
   {
     :hostname => 'latest',
@@ -40,7 +41,8 @@ permanent = [
     :dbport => 35432,
     :metricsport => 9115,
     :autostart => true,
-    :deploymontagu => 'latest'
+    :deploymontagu => 'latest',
+    :ram_size_mb => '16384'
   },
   {
     :hostname => 'dev',
@@ -49,7 +51,8 @@ permanent = [
     :dbport => 45432,
     :metricsport => 9116,
     :autostart => false,
-    :deploymontagu => 'branch'
+    :deploymontagu => 'branch',
+    :ram_size_mb => '16384'
   }
 ]
 
@@ -84,7 +87,7 @@ Vagrant.configure(2) do |config|
     config.vm.define machine[:hostname], autostart: machine[:autostart] do |machine_config|
       machine_config.vm.provider :virtualbox do | vbox |
         vbox.gui = false
-        vbox.memory = ram_size_mb
+        vbox.memory = machine[:ram_size_mb]
       end
       machine_config.persistent_storage.location =
         "staging/disk/#{machine[:hostname]}.vdi"
