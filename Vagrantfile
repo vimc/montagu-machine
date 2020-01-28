@@ -32,7 +32,7 @@ permanent = [
     :dbport => 5432,
     :metricsport => 9114,
     :autostart => true,
-    :ram_size_mb => '24576'
+    :ram_size_mb => '32768'
   },
   {
     :hostname => 'latest',
