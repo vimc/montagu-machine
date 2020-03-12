@@ -31,7 +31,7 @@ APT::Periodic::Verbose 2;
 APT::Periodic::RandomSleep 1;
 EOF
 
-# The next section can be deprecated if we stop using slack.
+# The next section should be deleted if we stop using slack.
 
 export VAULT_ADDR=https://support.montagu.dide.ic.ac.uk:8200
 if [ "$VAULT_AUTH_GITHUB_TOKEN" = "" ]; then
