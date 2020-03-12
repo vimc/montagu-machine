@@ -71,9 +71,13 @@ if [ -f /var/run/reboot-required ]; then
   fi
 
 # For slack:
+
   curl -X POST -H 'Content-type: application/json' -d "{ \"channel\":\"#$CHANNEL\", \"username\":\"reboot-bot\", \"icon_emoji\":\":boot:\", \"text\":\"A reboot is required on "\${hostname}".montagu.dide.ic.ac.uk following automatic updates.\"}" https://hooks.slack.com/services/$SLACK_WEBHOOK
+
 # For teams:
+
   curl -H 'Content-type: application/json' -d "{ \"channel\":\"#$TEAMS_CHANNEL\", \"text\":\" \", \"title\":\"Reboot required on "${hostname}".montagu.dide.ic.ac.uk following automatic updates.\"}" https://outlook.office.com/webhook/$TEAMS_WEBHOOK
+
 fi
 EOF
 
