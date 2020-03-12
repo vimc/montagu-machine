@@ -77,5 +77,4 @@ if [ -f /var/run/reboot-required ]; then
 fi
 EOF
 
-
-fi
+chmod 755 /etc/cron.daily/check_reboot_required
