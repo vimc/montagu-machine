@@ -2,9 +2,6 @@
 
 set -e
 
-CHANNEL=${CHANNEL:-montagu-reboot}
-TEAMS_CHANNEL=${CHANNEL:-bot-reboot}
-
 apt-get update
 apt-get install -y unattended-upgrades curl
 
