@@ -31,53 +31,22 @@ APT::Periodic::Verbose 2;
 APT::Periodic::RandomSleep 1;
 EOF
 
-# The next section should be deleted if we stop using slack.
-
-export VAULT_ADDR=https://support.montagu.dide.ic.ac.uk:8200
-if [ "$VAULT_AUTH_GITHUB_TOKEN" = "" ]; then
-    echo -n "Please provide your GitHub personal access token for the vault: "
-    read -s token
-    echo ""
-    export VAULT_AUTH_GITHUB_TOKEN=${token}
-fi
-vault login -method=github
-SLACK_WEBHOOK=$(vault read -field=value secret/slack/monitor-webhook)
-
-# This section is for Microsoft Teams, using the departmental vault server.
-
-export VAULT_ADDR=https://vault.dide.ic.ac.uk:8200
-if [ "$VAULT_AUTH_GITHUB_TOKEN" = "" ]; then
-    echo -n "Please provide your GitHub personal access token for the vault: "
-    read -s token
-    echo ""
-    export VAULT_AUTH_GITHUB_TOKEN=${token}
-fi
-vault login -method=github
-TEAMS_WEBHOOK=$(vault read -field=value secret/reside/teams/reboot-monitor-webhook)
-
-
 cat <<EOF > /etc/cron.daily/check_reboot_required
 #!/usr/bin/env bash
 
+hostname=\$(uname -n)
+if [ \$hostname = "fi--didevimc01" ]; then
+  hostname="production"
+elif [ \$hostname = "fi--didevimc02" ]; then
+  hostname="support"
+elif [ \$hostname = "wpia-didess1" ]; then
+  hostname="annex"
+fi
+
 if [ -f /var/run/reboot-required ]; then
-
-  hostname=\$(uname -n)
-  if [ \$hostname = "fi--didevimc01" ]; then
-    hostname="production"
-  elif [ \$hostname = "fi--didevimc02" ]; then
-    hostname="support"
-  elif [ \$hostname = "wpia-didess1" ]; then
-    hostname="annex"
-  fi
-
-# For slack:
-
-  curl -X POST -H 'Content-type: application/json' -d "{ \"channel\":\"#$CHANNEL\", \"username\":\"reboot-bot\", \"icon_emoji\":\":boot:\", \"text\":\"A reboot is required on "\${hostname}".montagu.dide.ic.ac.uk following automatic updates.\"}" https://hooks.slack.com/services/$SLACK_WEBHOOK
-
-# For teams:
-
-  curl -H 'Content-type: application/json' -d "{ \"channel\":\"#$TEAMS_CHANNEL\", \"text\":\" \", \"title\":\"Reboot required on "${hostname}".montagu.dide.ic.ac.uk following automatic updates.\"}" https://outlook.office.com/webhook/$TEAMS_WEBHOOK
-
+  curl "https://mrcdata.dide.ic.ac.uk/monitor/?machine=\${hostname}.montagu.dide.ic.ac.uk&status=1"
+else
+  curl "https://mrcdata.dide.ic.ac.uk/monitor/?machine=\${hostname}.montagu.dide.ic.ac.uk&status=0"
 fi
 EOF
 
