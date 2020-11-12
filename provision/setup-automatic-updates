@@ -41,9 +41,9 @@ elif [ \$hostname = "wpia-didess1" ]; then
 fi
 
 if [ -f /var/run/reboot-required ]; then
-  curl "https://mrcdata.dide.ic.ac.uk/monitor/?machine=\${hostname}.montagu.dide.ic.ac.uk&status=1"
+  curl "https://monitor.dide.ic.ac.uk/?machine=\${hostname}.montagu.dide.ic.ac.uk&status=1"
 else
-  curl "https://mrcdata.dide.ic.ac.uk/monitor/?machine=\${hostname}.montagu.dide.ic.ac.uk&status=0"
+  curl "https://monitor.dide.ic.ac.uk/?machine=\${hostname}.montagu.dide.ic.ac.uk&status=0"
 fi
 EOF
 
