@@ -50,7 +50,7 @@ You can check things are working by:
    1. Update the token in the vault `vault write secret/teamcity/su token=<new-token>`
    1. Going to http://teamcity.montagu.dide.ic.ac.uk:8111 and checking 
    that the page loads, you can login as a super user and that 3 agents are connected.
-1. Staging: Browsing to the instances: URL and ports can be read from [montagu settings json](https://github.com/vimc/montagu/tree/master/settings)
+1. Staging: Browsing to the instances: URL and ports can be read from [montagu settings json](https://github.com/vimc/montagu/tree/master/settings) and make sure orderly web is running too by accessing the reporting portal.
 1. Vault: If you were able to unseal it, then it's up
 1. Monitor: Go to http://support.montagu.dide.ic.ac.uk:9090/ see [deployment on support docs for details if not up](https://github.com/vimc/montagu-monitor#deployment-on-support)
 
