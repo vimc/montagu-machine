@@ -9,8 +9,6 @@ Host fingerprint (ECDSA): `SHA256:etgLOXa8brU/0SsfYfoFwsNW3ljbkLPd3okPJlICN6A`
   (via vagrant, installed as a systemd service as `montagu-ci`)
 * [Staging](https://github.com/vimc/montagu-machine/tree/master/staging)
   (via vagrant, installed as a systemd service as `montagu-staging`)
-* [Docker registry](https://github.com/vimc/montagu-registry) 
-  (as Docker container, control from `~montagu/registry`)
 * [Vault](https://github.com/vimc/montagu-vault) (as Docker container, control from `~montagu/vault`)
 * [Montagu-Monitor](https://github.com/vimc/montagu-monitor) (as Docker container, control from `~montagu/monitor`)
 * [YouTrack-Integration](https://github.com/reside-ic/youtrack-integration) (as Docker container, control from `~montagu/youtrack-integration`)
@@ -41,14 +39,18 @@ All services except the Vault and the YouTrack webhook restart automatically on 
 
 1. Start Vault: [Instructions](https://github.com/vimc/montagu-vault#restarting-andor-restoring-the-vault)
 1. Unseal the Vault: [Instructions](https://github.com/vimc/montagu-vault#unsealing-the-vault)
-1. Start the YouTrack webhook: `~montagu/youtrack-integration/run --use-vault`
+1. As the montagu user start the YouTrack webhook: `~montagu/youtrack-integration/run --use-vault`
 
 You can check things are working by:
 
-1. TeamCity: Going to http://teamcity.montagu.dide.ic.ac.uk:8111 and checking 
-   that the page loads and that 3 agents are connected.
-1. Registry: Running `docker pull docker.montagu.dide.ic.ac.uk:5000/montagu-db:master`
-1. Staging: Browsing to the instances: [URLs](https://github.com/vimc/montagu/blob/master/staging/README.md#access-the-stage-instances)
+1. TeamCity: This is in the process of being deprecated and all access is via logging in using super user token which you need to retrieve from the startup logs:
+   1. ssh onto support as vagrant user and go to `montagu-ci` dir
+   1. `vagrant ssh montagu-ci-server` to ssh into VM
+   1. Find the auth token `sudo grep -ahnr "Super user authentication token" /opt/Teamcity/logs/teamcity-server.log`
+   1. Update the token in the vault `vault write secret/teamcity/su token=<new-token>`
+   1. Going to http://teamcity.montagu.dide.ic.ac.uk:8111 and checking 
+   that the page loads, you can login as a super user and that 3 agents are connected.
+1. Staging: Check that montagu and orderly web are running on the science & uat instances (URL and ports can be read from [montagu settings json](https://github.com/vimc/montagu/tree/master/settings)) by logging in and accessing the reporting portal.
 1. Vault: If you were able to unseal it, then it's up
-1. Monitor: Go to http://support.montagu.dide.ic.ac.uk:9090/
+1. Monitor: Go to http://support.montagu.dide.ic.ac.uk:9090/ see [deployment on support docs for details if not up](https://github.com/vimc/montagu-monitor#deployment-on-support)
 
