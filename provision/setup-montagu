@@ -41,6 +41,7 @@ if [ -d montagu ]; then
 else
     echo "setting up montagu"
     git clone --recursive --branch update-psycopg2 https://github.com/vimc/montagu ${MONTAGU_PATH}
+    apt-get install -y libpq-dev
     pip3 install --user -r ${MONTAGU_PATH}/src/requirements.txt
     cp ${MONTAGU_PATH}/settings/${CONFIG_NAME}.json \
        ${MONTAGU_PATH}/src/montagu-deploy.json
