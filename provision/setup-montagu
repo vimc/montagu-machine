@@ -40,7 +40,7 @@ if [ -d montagu ]; then
     echo "montagu already set up"
 else
     echo "setting up montagu"
-    git clone --recursive https://github.com/vimc/montagu ${MONTAGU_PATH}
+    git clone --recursive --branch update-psycopg2 https://github.com/vimc/montagu ${MONTAGU_PATH}
     pip3 install --user -r ${MONTAGU_PATH}/src/requirements.txt
     cp ${MONTAGU_PATH}/settings/${CONFIG_NAME}.json \
        ${MONTAGU_PATH}/src/montagu-deploy.json
