@@ -3,7 +3,7 @@
 Vagrant.require_version ">= 2.2.3"
 
 domain = 'localdomain'
-box = "bento/ubuntu-16.04"
+box = "bento/ubuntu-20.04"
 data_disk_size_gb = 900
 
 vault_config_file = 'staging/shared/vault_config'
