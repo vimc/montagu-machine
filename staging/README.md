@@ -39,6 +39,35 @@ systemctl status montagu-staging         # short status, run as ordinary user
 sudo journalctl --unit montagu-staging   # full log, needs root
 ```
 
+## Rebuilding a VM (e.g. uat, science)
+
+First ensure that `staging/shared/vault_config` includes a valid
+`VAULT_AUTH_GITHUB_TOKEN` then:
+
+```shell
+vagrant destroy uat
+
+# [Optional] To also destroy the data volume - required if modifying
+# `data_disk_size_gb` but otherwise undesirable as it necessitates a full sync:
+VBoxManage list hdds
+VBoxManage closemedium disk <UUID of uat.vdi> --delete
+
+vagrant up uat
+```
+
+[OrderlyWeb](https://github.com/vimc/orderly-web/blob/master/ReleaseProcess.md#deploying-to-uat--science--production)
+then needs to be set up manually:
+```shell
+./uat.sh
+git clone git@github.com:vimc/orderly-web-deploy.git
+(cd orderly-web-deploy && python3 setup.py install --user)
+git clone git@github.com:vimc/montagu-orderly-web.git
+(cd montagu-orderly-web && ./setup uat && ./start)
+```
+See [orderly-web-deploy](https://github.com/vimc/orderly-web-deploy) and
+[montagu-orderly-web](https://github.com/vimc/montagu-orderly-web) for further
+details
+
 ## Troubleshooting
 
 ### Bringing up vms
