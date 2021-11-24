@@ -68,6 +68,9 @@ Vagrant.configure(2) do |config|
   config.persistent_storage.size = data_disk_size_gb * 1024
 
   config.vm.provision :shell do |shell|
+    shell.path = 'provision/setup-certs'
+  end
+  config.vm.provision :shell do |shell|
     shell.path = 'provision/setup-docker'
     shell.args = ['vagrant']
     shell.env = {"DOCKER_LARGE_DISK" => "/mnt/data"}

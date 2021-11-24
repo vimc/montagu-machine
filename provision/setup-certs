@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -ex
+
+sudo apt update
+sudo apt-get install apt-transport-https ca-certificates -y
+sudo update-ca-certificates
